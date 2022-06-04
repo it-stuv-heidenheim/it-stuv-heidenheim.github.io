@@ -18,6 +18,6 @@ fetch(url).then((res) => {
 });
 
 function processCardDataAndGetText(cardData) {
-  var resHtml = `<p>${cardData.desc || fallbackText}</p>`;
+  var resHtml = `<h6>${cardData.desc || fallbackText}</h6>`;
   return resHtml;
 }

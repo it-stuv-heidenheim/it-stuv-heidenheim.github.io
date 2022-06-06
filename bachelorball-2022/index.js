@@ -29,7 +29,26 @@ mapping.forEach((mapObj) => {
   });
 });
 
+/* SECURE MAKING SECTION */
+
+// remove script tags in html code
+function removeScriptTags(html) {
+  return html.replace(
+    /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
+    ""
+  );
+}
+
+// remove style tags in html code
+function removeStyleTags(html) {
+  return html.replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, "");
+}
+
+function sanitizeHtml(html) {
+  return removeScriptTags(removeStyleTags(html));
+}
+
 function processCardDataAndGetText(cardData) {
-  var resHtml = `<h6>${cardData.desc || fallbackText}</h6>`;
+  var resHtml = `<h6>${sanitizeHtml(cardData.desc) || fallbackText}</h6>`;
   return resHtml;
 }

@@ -1,19 +1,31 @@
 /* CONFIG SECTION */
 
-const cardCode = "T3dsxBnm";
-const htmlAnchorId = "trello-integration-anchor";
+const mapping = [
+  {
+    /* FAQ Section */
+    cardCode: "T3dsxBnm",
+    htmlAnchorId: "bachball-2022-faq",
+  },
+  {
+    /* News */
+    cardCode: "5x1SqNDI",
+    htmlAnchorId: "bachball-2022-news",
+  },
+];
 
-/* LOGIC SECTION */
+mapping.forEach((mapObj) => {
+  const { cardCode, htmlAnchorId } = mapObj;
 
-const url = `https://api.trello.com/1/cards/${cardCode}`;
+  const url = `https://api.trello.com/1/cards/${cardCode}`;
 
-const fallbackText =
-  "There hasn't been added any content yet. Please come back again later!";
+  const fallbackText =
+    "There hasn't been added any content yet. Please come back again later!";
 
-fetch(url).then((res) => {
-  res.json().then((cardData) => {
-    var htmlAnchor = document.querySelector(`#${htmlAnchorId}`);
-    htmlAnchor.innerHTML = processCardDataAndGetText(cardData);
+  fetch(url).then((res) => {
+    res.json().then((cardData) => {
+      var htmlAnchor = document.querySelector(`#${htmlAnchorId}`);
+      htmlAnchor.innerHTML = processCardDataAndGetText(cardData);
+    });
   });
 });
 

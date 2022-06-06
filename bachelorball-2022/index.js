@@ -52,3 +52,23 @@ function processCardDataAndGetText(cardData) {
   var resHtml = `<h6>${sanitizeHtml(cardData.desc) || fallbackText}</h6>`;
   return resHtml;
 }
+
+const faqTemplate = (question, answer) => {
+  return `<div><p>${question}</p>
+  <br/>
+  <p><italic>${answer}</italic></p>
+  </div>`;
+};
+
+function generateFaqHtml(cardDesc) {
+  var lines = cardDesc.split("\n");
+  var i = 0;
+  var resHtml = "";
+  for (i; i < lines.length; i++) {
+    var line = lines[i];
+    var lineSplit = line.split(":").trim();
+    var question = lineSplit[0];
+    var answer = lineSplit[1];
+    resHtml += faqTemplate(question, answer);
+  }
+}

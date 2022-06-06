@@ -1,7 +1,7 @@
 # Introduction
 
 This repo has been made to provide a (very quick and dirty) way of a one-way integration from Trello to our website.
-If you are willing to do so, you will propably easy be able to find a lot of security issues. Please do not exploit them, since we are only a small student council which just wants to get more efficiency in their workflow and to realize that with very limited resources.
+If you are willing to do so, you will propably easy be able to find a lot of security issues. Please do not exploit them, since we are only a small student council which just wants to get more efficiency in their workflow and to realize that with very limited resources. You won't find anything there to make money with.
 
 # Architecture
 

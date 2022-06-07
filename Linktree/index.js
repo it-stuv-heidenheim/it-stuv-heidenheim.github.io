@@ -3,7 +3,7 @@
 const cardCode = "zawJegnv";
 const htmlAnchorId = "trello-linktree";
 
-/* LOGIC SECTION */
+/* LOGIC SECTION *t/
 
 const url = `https://api.trello.com/1/cards/${cardCode}`;
 

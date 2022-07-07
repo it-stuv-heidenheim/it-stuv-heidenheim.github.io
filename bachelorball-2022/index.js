@@ -2,14 +2,29 @@
 
 const mapping = [
   {
-    /* FAQ Section */
-    cardCode: "T3dsxBnm",
-    htmlAnchorId: "bachball-2022-faq",
-  },
-  {
     /* News */
     cardCode: "5x1SqNDI",
     htmlAnchorId: "bachball-2022-news",
+  },
+  {
+    /* Tickets */
+    cardCode: "xvuIEuvn",
+    htmlAnchorId: "bachball-2022-tickets",
+  },
+  {
+    /* Discounts */
+    cardCode: "ZwzIvZdT",
+    htmlAnchorId: "bachball-2022-discounts",
+  },
+  {
+    /* Photographer */
+    cardCode: "22Oz8NkQ",
+    htmlAnchorId: "bachball-2022-photo",
+  },
+  {
+    /* FAQ Section */
+    cardCode: "T3dsxBnm",
+    htmlAnchorId: "bachball-2022-faq",
   },
 ];
 

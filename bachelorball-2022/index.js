@@ -39,7 +39,7 @@ mapping.forEach((mapObj) => {
   fetch(url).then((res) => {
     res.json().then((cardData) => {
       var htmlAnchor = document.querySelector(`#${htmlAnchorId}`);
-      htmlAnchor.innerHTML = processCardDataAndGetText(cardData);
+      htmlAnchor.innerHTML = processCardDataAndGetText(cardData, fallbackText);
     });
   });
 });
@@ -63,7 +63,7 @@ function sanitizeHtml(html) {
   return removeScriptTags(removeStyleTags(html));
 }
 
-function processCardDataAndGetText(cardData) {
+function processCardDataAndGetText(cardData, fallbackText) {
   var resHtml = `<h6>${sanitizeHtml(cardData.desc) || fallbackText}</h6>`;
   return resHtml;
 }

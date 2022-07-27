@@ -51,7 +51,7 @@ fetch(url).then((res) => {
         lineNodes += lineNode;
       });
 
-      var trelloAnchor = document.getElementById(htmlAnchor);
+      var trelloAnchor = document.getElementById(htmlAnchorId);
 
       trelloAnchor.innerHTML = lineNodes;
     },

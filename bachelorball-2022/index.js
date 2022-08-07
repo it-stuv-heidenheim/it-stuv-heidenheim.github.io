@@ -2,43 +2,45 @@
 
 const mapping = [
   {
-    /* News */
-    cardCode: "5x1SqNDI",
-    htmlAnchorId: "bachball-2022-news",
+    trelloCardCode: "T3dsxBnm",
+    htmlIdSuffix: "faq",
   },
   {
-    /* Tickets */
-    cardCode: "xvuIEuvn",
-    htmlAnchorId: "bachball-2022-tickets",
+    trelloCardCode: "5x1SqNDI",
+    htmlIdSuffix: "allgemeines",
   },
   {
-    /* Discounts */
-    cardCode: "ZwzIvZdT",
-    htmlAnchorId: "bachball-2022-discounts",
+    trelloCardCode: "j5fFddpq",
+    htmlIdSuffix: "location",
   },
   {
-    /* Photographer */
-    cardCode: "22Oz8NkQ",
-    htmlAnchorId: "bachball-2022-photo",
+    trelloCardCode: "KpMuPESO",
+    htmlIdSuffix: "motto",
   },
   {
-    /* FAQ Section */
-    cardCode: "T3dsxBnm",
-    htmlAnchorId: "bachball-2022-faq",
+    trelloCardCode: "xvuIEuvn",
+    htmlIdSuffix: "tickets",
+  },
+  {
+    trelloCardCode: "22Oz8NkQ",
+    htmlIdSuffix: "fotos",
   },
 ];
 
-mapping.forEach((mapObj) => {
-  const { cardCode, htmlAnchorId } = mapObj;
+const hiddenText = `Für diesen Bereich stehen noch keine Daten zur Verfügung.
+Bitte versuche es später erneut.`;
 
-  const url = `https://api.trello.com/1/cards/${cardCode}`;
+mapping.forEach((mapObj) => {
+  const { trelloCardCode, htmlIdSuffix } = mapObj;
+
+  const url = `https://api.trello.com/1/cards/${trelloCardCode}`;
 
   const fallbackText =
     "There hasn't been added any content yet. Please come back again later!";
 
   fetch(url).then((res) => {
     res.json().then((cardData) => {
-      var htmlAnchor = document.querySelector(`#${htmlAnchorId}`);
+      var htmlAnchor = document.querySelector(`#bachball-2022-${htmlIdSuffix}`);
       htmlAnchor.innerHTML = processCardDataAndGetText(cardData, fallbackText);
     });
   });
@@ -64,14 +66,19 @@ function sanitizeHtml(html) {
 }
 
 function processCardDataAndGetText(cardData, fallbackText) {
+  if (
+    cardData.labels.find((labelObj) => labelObj.color == "red") != undefined
+  ) {
+    // red label set, so content is not supposed to be published yet
+    return `<p>${hiddenText}</p>`;
+  }
   var resHtml = `<h6>${sanitizeHtml(cardData.desc) || fallbackText}</h6>`;
   return resHtml;
 }
 
 const faqTemplate = (question, answer) => {
-  return `<div><p>${question}</p>
-  <br/>
-  <p><italic>${answer}</italic></p>
+  return `<div><h6>${question}</h6>
+  <p>${answer}</p>
   </div>`;
 };
 
@@ -81,7 +88,7 @@ function generateFaqHtml(cardDesc) {
   var resHtml = "";
   for (i; i < lines.length; i++) {
     var line = lines[i];
-    var lineSplit = line.split(":").trim();
+    var lineSplit = line.split("-").trim();
     var question = lineSplit[0];
     var answer = lineSplit[1];
     resHtml += faqTemplate(question, answer);

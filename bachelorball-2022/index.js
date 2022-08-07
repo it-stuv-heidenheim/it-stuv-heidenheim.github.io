@@ -27,8 +27,12 @@ const mapping = [
   },
 ];
 
+// Text to be shown if label is hidden
 const hiddenText = `Für diesen Bereich stehen noch keine Daten zur Verfügung.
 Bitte versuche es später erneut.`;
+
+// Text to be shown if label is hidden but no description set
+const noContentYetText = hiddenText;
 
 mapping.forEach((mapObj) => {
   const { trelloCardCode, htmlIdSuffix } = mapObj;
@@ -41,7 +45,19 @@ mapping.forEach((mapObj) => {
   fetch(url).then((res) => {
     res.json().then((cardData) => {
       var htmlAnchor = document.querySelector(`#bachball-2022-${htmlIdSuffix}`);
-      htmlAnchor.innerHTML = processCardDataAndGetText(cardData, fallbackText);
+
+      var innerHtml = "";
+      if (
+        cardData.labels.find((labelObj) => labelObj.color == "red") != undefined
+      ) {
+        // red label set, so content is not supposed to be published yet
+        innerHtml = `<p>${hiddenText}</p>`;
+      } else {
+        // act normal and process card description
+        innerHtml = processSwitchAndReturnHtml(htmlIdSuffix, cardData.desc);
+      }
+
+      htmlAnchor.innerHTML = innerHtml;
     });
   });
 });
@@ -65,15 +81,19 @@ function sanitizeHtml(html) {
   return removeScriptTags(removeStyleTags(html));
 }
 
-function processCardDataAndGetText(cardData, fallbackText) {
-  if (
-    cardData.labels.find((labelObj) => labelObj.color == "red") != undefined
-  ) {
-    // red label set, so content is not supposed to be published yet
-    return `<p>${hiddenText}</p>`;
+/* END OF SECURE MAKING */
+
+function processSwitchAndReturnHtml(htmlSuffix, cardDesc) {
+  switch (htmlSuffix) {
+    case "faq":
+      return generateFaqHtml(cardDesc);
+    default:
+      return processCardDataAndGetText(cardDesc);
   }
-  var resHtml = `<h6>${sanitizeHtml(cardData.desc) || fallbackText}</h6>`;
-  return resHtml;
+}
+
+function processCardDataAndGetText(cardDesc) {
+  return `<h6>${sanitizeHtml(cardDesc) || noContentYetText}</h6>`;
 }
 
 const faqTemplate = (question, answer) => {
@@ -88,9 +108,16 @@ function generateFaqHtml(cardDesc) {
   var resHtml = "";
   for (i; i < lines.length; i++) {
     var line = lines[i];
-    var lineSplit = line.split("-").trim();
-    var question = lineSplit[0];
-    var answer = lineSplit[1];
+    if (line == "") continue;
+    var lineParts = line.split("-");
+
+    // if no - in there, no answer set yet, skip the line
+    if (lineParts.length < 2) continue;
+
+    var question = lineParts[0].trim();
+    var answer = lineParts[1].trim();
     resHtml += faqTemplate(question, answer);
   }
+
+  return resHtml;
 }

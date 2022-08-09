@@ -15,8 +15,6 @@ fetch(url).then((res) => {
     (data) => {
       var desc = data.desc;
 
-      var surroundingNode = '<div class="wp-block-columns">';
-
       var lines = desc.split("\n");
 
       var lineNodes = ""; // this will contain all the lines styled based
@@ -27,8 +25,6 @@ fetch(url).then((res) => {
 
         line = line.trim();
         if (line == "") return; // next line if empty
-
-        console.log(line);
 
         if (line.includes("://")) {
           // pretty easy link detection system:
@@ -41,9 +37,7 @@ fetch(url).then((res) => {
         } else {
           // if no line with link, then treated as heading
 
-          console.log("detected heading: " + line);
-
-          var headingNode = '<h2 style="margin-top: 50px">' + line + "</h2>";
+          var headingNode = '<h3 style="margin-top: 50px">' + line + "</h3>";
 
           lineNode = headingNode;
         }
@@ -63,14 +57,14 @@ const writeWithTag = (tag, text) => {
   return `<${tag}>${text}</${tag}>`;
 };
 
-const getSimpleHeadingLink = (label, url) =>
-  `<h3><a href="${url}">${label}</a></h3>`;
+function getSimpleHeadingLink(label, url) {
+  return `<h3><a href="${url}">${label}</a></h3>`;
+}
 
-const getBtnHtml = (label, url) =>
-  `<div class="elementor-button-wrapper">
-			<a href="${url}" class="elementor-button-link elementor-button elementor-size-sm" role="button">
-						<span class="elementor-button-content-wrapper">
-						<span class="elementor-button-text">${label}</span>
-		</span>
-					</a>
-		</div>`;
+function getLink(label, url) {
+  return `
+  <h4>
+  <a href="${url}>${label}</a>
+  </h4>
+  `;
+}

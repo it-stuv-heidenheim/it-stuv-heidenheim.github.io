@@ -40,7 +40,7 @@ function processCardDataAndGetText(cardData) {
 function makeFaqElement(question, answer) {
   return `
 	<div>
-	<h6>${question}</h6>
+	<h4>${question}</h6>
 	<p>${answer}</p>	
 	</div>
 	`;

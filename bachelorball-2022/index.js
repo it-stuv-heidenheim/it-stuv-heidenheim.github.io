@@ -89,7 +89,13 @@ fetch(url).then((res) => {
 
     // when lines done, add last section
 
-    var htmlContent = markdownParser(contentOfCurrentSection);
+    if (isCurrentSectionSupposedToBeHidden) {
+      var htmlContent = hiddenText;
+    } else if (contentOfCurrentSection == "") {
+      var htmlContent = fallbackText;
+    } else {
+      var htmlContent = markdownParser(contentOfCurrentSection);
+    }
 
     try {
       document.querySelector(

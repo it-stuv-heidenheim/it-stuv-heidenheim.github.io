@@ -102,7 +102,10 @@ fetch(url).then((res) => {
         `#${sectionNodePrefix + currentHeading}`
       ).innerHTML = htmlContent;
     } catch {
-      debugger;
+      console.warn(`Konnte Anker #${
+        sectionNodePrefix + currentHeading
+      } nicht finden:
+            ${err}`);
     }
   });
 });

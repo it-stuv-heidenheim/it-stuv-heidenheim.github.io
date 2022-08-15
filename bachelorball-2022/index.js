@@ -3,16 +3,16 @@
 const trelloCardCode = "ER1gWlYv";
 
 // Text to be shown if label is hidden
-const hiddenText = `Für diesen Bereich stehen noch keine Daten zur Verfügung.
-Bitte versuche es später erneut.`;
+const hiddenText = `Dieser Bereich wurde noch nicht veröffentlicht, bitte
+versuche es in wenigen Tagen nochmal!`;
 
 // Text to be shown if label is hidden but no description set
 const noContentYetText = hiddenText;
 
 const url = `https://api.trello.com/1/cards/${trelloCardCode}`;
 
-const fallbackText =
-  "There hasn't been added any content yet. Please come back again later!";
+const fallbackText = `Für diesen Bereich stehen noch keine Daten zur Verfügung.
+Bitte versuche es später erneut.`;
 
 const sectionNodePrefix = "bachball_2022_";
 
@@ -55,6 +55,8 @@ fetch(url).then((res) => {
 
           if (isCurrentSectionSupposedToBeHidden) {
             var htmlContent = hiddenText;
+          } else if (contentOfCurrentSection == "") {
+            var htmlContent = fallbackText;
           } else {
             var htmlContent = markdownParser(contentOfCurrentSection);
           }
@@ -63,12 +65,15 @@ fetch(url).then((res) => {
             document.querySelector(
               `#${sectionNodePrefix + currentHeading}`
             ).innerHTML = htmlContent;
-
-            // and empty the content again
-            contentOfCurrentSection = "";
-          } catch {
-            debugger;
+          } catch (err) {
+            console.warn(`Konnte Anker #${
+              sectionNodePrefix + currentHeading
+            } nicht finden:
+            ${err}`);
           }
+
+          // and empty the content again
+          contentOfCurrentSection = "";
 
           currentHeading = heading;
           isCurrentSectionSupposedToBeHidden =

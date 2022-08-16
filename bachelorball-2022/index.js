@@ -28,7 +28,7 @@ fetch(url).then((res) => {
 
     var hiddenSectionPattern = RegExp(`^\/\/\/ *(?<sectionName>\\w+) *#+$`);
 
-    var contentOfCurrentSection = "";
+    var htmlContentOfCurrentSection = "";
 
     var currentHeading = "";
     var isCurrentSectionSupposedToBeHidden = false;
@@ -55,10 +55,10 @@ fetch(url).then((res) => {
 
           if (isCurrentSectionSupposedToBeHidden) {
             var htmlContent = hiddenText;
-          } else if (contentOfCurrentSection == "") {
+          } else if (htmlContentOfCurrentSection == "") {
             var htmlContent = fallbackText;
           } else {
-            var htmlContent = markdownParser(contentOfCurrentSection);
+            var htmlContent = htmlContentOfCurrentSection;
           }
 
           try {
@@ -73,7 +73,7 @@ fetch(url).then((res) => {
           }
 
           // and empty the content again
-          contentOfCurrentSection = "";
+          htmlContentOfCurrentSection = "";
 
           currentHeading = heading;
           isCurrentSectionSupposedToBeHidden =
@@ -83,7 +83,7 @@ fetch(url).then((res) => {
         // no heading, so section content is assumed
         // we add the content to handle it later
 
-        contentOfCurrentSection += line;
+        htmlContentOfCurrentSection += `<p>${markdownParser(line)}</p>`;
       }
     }
 
@@ -91,10 +91,10 @@ fetch(url).then((res) => {
 
     if (isCurrentSectionSupposedToBeHidden) {
       var htmlContent = hiddenText;
-    } else if (contentOfCurrentSection == "") {
+    } else if (htmlContentOfCurrentSection == "") {
       var htmlContent = fallbackText;
     } else {
-      var htmlContent = markdownParser(contentOfCurrentSection);
+      var htmlContent = markdownParser(htmlContentOfCurrentSection);
     }
 
     try {
@@ -146,10 +146,14 @@ function processCardDataAndGetText(cardDesc) {
 
 const markdownParser = (text) => {
   const toHTML = text
-    .replace(/^### (.*$)/gim, "<h3>$1</h3>") // h3 tag
-    .replace(/^## (.*$)/gim, "<h2>$1</h2>") // h2 tag
-    .replace(/^# (.*$)/gim, "<h1>$1</h1>") // h1 tag
-    .replace(/\*\*(.*)\*\*/gim, "<b>$1</b>") // bold text
-    .replace(/\*(.*)\*/gim, "<i>$1</i>"); // italic text
+    .replace(/^# {0,1}(\w.*)/gm, "<h1>$1</h1>") // h1 tag
+    .replace(/^## {0,1}(\w.*)/gm, "<h2>$1</h2>") // h2 tag
+    .replace(/^### {0,1}(\w.*)/gm, "<h3>$1</h3>") // h3 tag
+    .replace(/^#### {0,1}(\w.*)/gm, "<h4>$1</h4>") // h4 tag
+    .replace(/^##### {0,1}(\w.*)/gm, "<h5>$1</h5>") // h5 tag
+    .replace(/^###### {0,1}(\w.*)/gm, "<h6>$1</h6>") // h6 tag
+    .replace(/\*\*(.*)\*\*/gm, "<b>$1</b>") // bold text
+    .replace(/_(.*)_/gm, "<i>$1</i>") // italic text
+    .replace(/\[(.+)\]\((.+)\)/gm, '<a href="$2">$1</a>'); // links
   return toHTML.trim(); // using trim method to remove whitespace
 };

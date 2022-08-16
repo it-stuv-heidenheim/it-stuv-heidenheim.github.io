@@ -152,8 +152,8 @@ const markdownParser = (text) => {
     .replace(/^#### {0,1}(\w.*)/gm, "<h4>$1</h4>") // h4 tag
     .replace(/^##### {0,1}(\w.*)/gm, "<h5>$1</h5>") // h5 tag
     .replace(/^###### {0,1}(\w.*)/gm, "<h6>$1</h6>") // h6 tag
-    .replace(/\*\*(.*)\*\*/gm, "<b>$1</b>") // bold text
-    .replace(/_(.*)_/gm, "<i>$1</i>") // italic text
+    .replace(/\*\*([^*]+)\*\*/gm, "<b>$1</b>") // bold text
+    .replace(/_([^_]+)_/gm, "<i>$1</i>") // italic text
     .replace(/\[(.+)\]\((.+)\)/gm, '<a href="$2">$1</a>'); // links
   return toHTML.trim(); // using trim method to remove whitespace
 };

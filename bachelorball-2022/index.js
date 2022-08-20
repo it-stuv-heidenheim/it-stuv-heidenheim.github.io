@@ -18,6 +18,7 @@ const sectionNodePrefix = "bachball_2022_";
 
 fetch(url).then((res) => {
   res.json().then((cardData) => {
+    console.log(cardData);
     if (!cardData.desc) {
       alert(`Kritischer Fehler: 
       überhaupt keine Daten gefunden, bitte sei so gut und melde das dem Orga-Team`);
@@ -25,6 +26,13 @@ fetch(url).then((res) => {
     var lines = cardData.desc.split("\n");
 
     var sectionHeadingPattern = RegExp(`^\/\/\/ *(?<sectionName>\\w+) *`);
+
+    const spaceToken = "§";
+
+    const spacePattern = RegExp(`^${spaceToken + spaceToken + spaceToken}+ *$`);
+
+    const indentLineToken = "=>";
+    const indentLinePattern = RegExp(`^${indentLineToken}`);
 
     var hiddenSectionPattern = RegExp(`^\/\/\/ *(?<sectionName>\\w+) *#+$`);
 
@@ -79,6 +87,19 @@ fetch(url).then((res) => {
           isCurrentSectionSupposedToBeHidden =
             line.match(hiddenSectionPattern) != null;
         }
+      } else if (line.match(spacePattern)) {
+        var lengthOfSection = line.split(spaceToken).length;
+
+        var space = "";
+        for (var j = 0; j < lengthOfSection; j++) {
+          space += "<br />";
+        }
+
+        htmlContentOfCurrentSection += space;
+      } else if (line.match(indentLinePattern)) {
+        htmlContentOfCurrentSection += `<p style="padding-left: 20px">
+        ${markdownParser(line.substr(indentLineToken.length))}
+        </p>`;
       } else {
         // no heading, so section content is assumed
         // we add the content to handle it later

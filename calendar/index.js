@@ -3,7 +3,7 @@
 const apiToken = "0TNxIxk3ETO9T2BfMZ9S821C";
 const trelloBoardId = "61e0727e01aa1e19ecb7adbf";
 
-const htmlAnchorId = "trello-integration-anchor";
+const htmlAnchorId = "trello-calendar";
 
 /* LOGIC SECTION */
 

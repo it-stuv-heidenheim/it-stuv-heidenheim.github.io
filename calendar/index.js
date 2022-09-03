@@ -12,48 +12,56 @@ const url = `https://api.trello.com/1/boards/${trelloBoardId}/cards?token=${apiT
 const fallbackText =
   "There hasn't been added any content yet. Please come back again later!";
 
+const noDescriptionText = "- keine Beschreibung veröffentlicht -";
+
 var htmlOut = "";
 
 fetch(url).then((res) => {
   res.json().then((cards) => {
-    // first, sort the card by their due date
+    // filter the ones without start date
+    cards = cards.filter((card) => card.start != null);
 
-    cards.sort((a, b) => a.due - b.due);
+    // sort the cards by their start date (comparison with plain hyphen unfortunately didn't work)
+    cards.sort((a, b) => new Date(a.start) - new Date(b.start));
 
     var iterMonthCode = "";
 
     for (var i = 0; i < cards.length; i++) {
       var card = cards[i];
 
-      const { name, desc, due, labels } = card;
+      const { name, desc, start, labels } = card;
 
       if (labels.length > 0) continue;
 
-      if (due == null) continue;
-
       // just very basic reformatting
 
-      var date = new Date(due);
+      var date = new Date(start);
 
       // TODO pretty display
 
-      if (iterMonthCode != date.getMonth() + date.getFullYear()) {
+      if (iterMonthCode != date.getMonth() + "-" + date.getFullYear()) {
         iterMonthCode = date.getMonth() + "-" + date.getFullYear();
 
         var monthHeading = date.toLocaleDateString("de-de", {
           month: "long",
         });
 
-        htmlOut += `<br><h2>${monthHeading}</h2>`;
+        htmlOut += `<h3 style="margin-bottom: 1em">${monthHeading}</h3>`;
       }
 
-      var dateFormatted = date.toLocaleDateString("de-de", {
-        weekday: "long",
-        month: "short",
-        day: "numeric",
-      });
+      var dateFormatted = date
+        .toLocaleDateString("de-de", {
+          day: "numeric",
+          weekday: "short",
+        })
+        .toUpperCase()
+        .replace(/(\w+)\., (\d+)\./g, "$1 $2");
 
-      htmlOut += `<div><i>${dateFormatted}</i></div><h3>${name}</h3><p>${desc}</p>`;
+      htmlOut += `
+      <h4 style="color: #E2001A">${dateFormatted}</h4>
+      <h3>${name}</h3>
+      <p style="margin-bottom: 3em">${desc || noDescriptionText}</p>
+      `;
     }
 
     document.querySelector("#" + htmlAnchorId).innerHTML = htmlOut;

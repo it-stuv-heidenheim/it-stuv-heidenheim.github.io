@@ -8,7 +8,7 @@ const fallbackText =
   "There hasn't been added any content yet. Please come back again later!"
 
 const noDescriptionText = ""
-const skipUntilThisMonth = false
+const skipUntilThisMonth = true
 
 /* END OF CONFIG SECTION */
 

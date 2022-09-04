@@ -35,6 +35,11 @@ fetch(url).then((res) => {
 
       const { name, desc, start, labels } = card
 
+      const titleLocationPattern =
+        /(?<title>\w+[ \d\w]+)(?:\(Ort: *(?<location>[\w \(\)-]+)\)){0,1}/
+
+      const { title, location } = name.match(titleLocationPattern).groups
+
       if (labels.length > 0) continue
 
       // just very basic reformatting
@@ -74,7 +79,12 @@ fetch(url).then((res) => {
 
       htmlOut += `
       <h4 style="color: #E2001A">${dateFormatted}</h4>
-      <h3>${name}</h3>
+      <h3>${title}</h3>
+      ${
+        location
+          ? `<h5><span style="margin-right: 5px">&#128205;</span>${location}</h5>`
+          : ""
+      }
       <p style="margin-bottom: 3em">${desc || noDescriptionText}</p>
       `
     }

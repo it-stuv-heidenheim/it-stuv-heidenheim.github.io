@@ -77,6 +77,16 @@ fetch(url).then((res) => {
         .toUpperCase()
         .replace(/(\w+)\., (\d+)\./g, "$1 $2")
 
+      // parse markdown in description
+      // first italic, then bold and then links
+      // and afterwards, one level of heading
+
+      desc = desc
+        .replace(/_(\w[\w \.\(\):]*)_/g, "<italic>$1</italic>")
+        .replace(/\*\*(\w[\w \.\(\):]*)\*\*/g, "<bold>$1</bold>")
+        .replace(/\[(\w[\w ]*)\]\(([\w-:\.\/]{4,})\)/g, '<a href="$2">$1</a>')
+        .replace(/# *(\w[\w ]*)/g, "<h4>$1</h4>")
+
       htmlOut += `
       <h4 style="color: #E2001A">${dateFormatted}</h4>
       <h3>${title}</h3>

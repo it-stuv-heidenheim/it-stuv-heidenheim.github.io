@@ -81,9 +81,9 @@ fetch(url).then((res) => {
       // first italic, then bold and then links
       // and afterwards, one level of heading
 
-      desc = desc
-        .replace(/_(\w[\w \.\(\):]*)_/g, "<italic>$1</italic>")
-        .replace(/\*\*(\w[\w \.\(\):]*)\*\*/g, "<bold>$1</bold>")
+      var parsedDescription = desc
+        .replace(/_(\w[\w \.\(\)\/:]*)_/g, "<i>$1</i>")
+        .replace(/\*\*(\w[\w \.\(\)\/:]*)\*\*/g, "<strong>$1</strong>")
         .replace(/\[(\w[\w ]*)\]\(([\w-:\.\/]{4,})\)/g, '<a href="$2">$1</a>')
         .replace(/# *(\w[\w ]*)/g, "<h4>$1</h4>")
 
@@ -95,7 +95,9 @@ fetch(url).then((res) => {
           ? `<h5><span style="margin-right: 5px">&#128205;</span>${location}</h5>`
           : ""
       }
-      <p style="margin-bottom: 3em">${desc || noDescriptionText}</p>
+      <p style="margin-bottom: 3em">${
+        parsedDescription || noDescriptionText
+      }</p>
       `
     }
 

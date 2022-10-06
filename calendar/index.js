@@ -66,16 +66,18 @@ fetch(url).then((res) => {
           month: "long",
         })
 
-        htmlOut += `<h3 style="margin-bottom: 1em">${monthHeading}</h3>`
+        htmlOut += `<h3 style="margin-bottom: 1em; font-size:2.5em; margin-top:3em">${monthHeading}</h3>`
       }
 
       var dateFormatted = date
         .toLocaleDateString("de-de", {
           day: "numeric",
           weekday: "short",
+          month: "2-digit",
         })
         .toUpperCase()
-        .replace(/(\w+)\., (\d+)\./g, "$1 $2")
+        .replace(/(\w+)\.,/g, "$1,")
+      // just replace the dot, but there would sure be a better way for formatting
 
       // parse markdown in description
       // first italic, then bold and then links

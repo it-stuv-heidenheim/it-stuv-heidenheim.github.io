@@ -76,7 +76,7 @@ fetch(url).then((res) => {
           month: "2-digit",
         })
         .toUpperCase()
-        .replace(/(\w+)\.,/g, "$1,")
+        .replace(/(\w+)\.,/g, "$1")
       // just replace the dot, but there would sure be a better way for formatting
 
       // parse markdown in description
